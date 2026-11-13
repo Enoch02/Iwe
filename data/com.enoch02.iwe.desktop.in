@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Ìwé
+Exec=iwe
+Icon=com.enoch02.iwe
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true
