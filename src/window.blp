@@ -3,27 +3,112 @@ using Adw 1;
 
 template $IweWindow: Adw.ApplicationWindow {
   title: _("Ìwé");
-  default-width: 800;
-  default-height: 600;
+  default-width: 1200;
+  default-height: 900;
 
-  content: Adw.ToolbarView {
-    [top]
-    Adw.HeaderBar {
-      [end]
-      MenuButton {
-        primary: true;
-        icon-name: "open-menu-symbolic";
-        tooltip-text: _("Main Menu");
-        menu-model: primary_menu;
+  content: Adw.OverlaySplitView split_view {
+    sidebar: Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar {}
+
+      content: Gtk.Stack sidebar_stack {
+        transition-type: crossfade;
+
+        StackPage {
+          name: "empty";
+
+          child: Adw.StatusPage outline_empty_page {
+            title: _("No Outline");
+            description: _("Open a markdown file to see its outline");
+          };
+        }
+
+        StackPage {
+          name: "outline";
+
+          child: Gtk.ScrolledWindow {
+            hscrollbar-policy: never;
+
+            child: Gtk.ListBox outline_list {
+              selection-mode: single;
+              activate-on-single-click: true;
+
+              styles [
+                "navigation-sidebar",
+              ]
+            };
+          };
+        }
+      };
+    };
+
+    content: Adw.ToolbarView {
+      [top]
+      Adw.HeaderBar {
+        show-title: false;
+
+        [start]
+        ToggleButton show_sidebar_button {
+          icon-name: "sidebar-show-symbolic";
+          tooltip-text: _("Toggle Sidebar");
+          active: bind split_view.show-sidebar bidirectional;
+        }
+
+        Button open_file_button {
+          icon-name: "document-open-symbolic";
+          tooltip-text: _("Open File");
+          action-name: "win.open-file";
+        }
+
+        [end]
+        MenuButton {
+          primary: true;
+          icon-name: "open-menu-symbolic";
+          tooltip-text: _("Main Menu");
+          menu-model: primary_menu;
+        }
       }
-    }
 
-    content: Label label {
-      label: _("Hello, World!");
+      content: Gtk.Stack content_stack {
+        transition-type: crossfade;
+        hhomogeneous: false;
+        vhomogeneous: false;
 
-      styles [
-        "title-1",
-      ]
+        StackPage {
+          name: "empty";
+
+          child: Adw.StatusPage {
+            title: _("No File Open");
+
+            Box no_file_msg_box {
+              orientation: vertical;
+
+              Label {
+                label: _("Open a markdown file to start reading");
+              }
+
+              Label {
+                label: _("You can drag a .md file here");
+              }
+
+              Button {
+                margin-top: 20;
+                label: _("Choose file");
+                action-name: "win.open-file";
+                halign: center;
+              }
+            }
+          };
+        }
+
+        StackPage {
+          name: "document";
+
+          child: Gtk.Box document_box {
+            orientation: vertical;
+          };
+        }
+      };
     };
   };
 }

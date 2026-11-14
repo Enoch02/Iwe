@@ -1,3 +1,3 @@
-# iwe
+# Ìwé
 
-A description of this project.
+A native Markdown Viewer for the GNOME Desktop environment
