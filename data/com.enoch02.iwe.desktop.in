@@ -1,10 +1,14 @@
 [Desktop Entry]
 Name=Ìwé
-Exec=iwe
+Exec=iwe %U
 Icon=com.enoch02.iwe
 Terminal=false
 Type=Application
 Categories=Utility;
+MimeType=text/markdown;
 Keywords=GTK;
 StartupNotify=true
-DBusActivatable=true
+# Launch through Exec so Flatpak can export opened files to the document
+# portal. D-Bus activation bypasses Flatpak's --file-forwarding wrapper and
+# hands the sandbox paths it cannot read.
+DBusActivatable=false

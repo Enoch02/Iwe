@@ -22,8 +22,8 @@ import gi
 
 from gettext import gettext as _
 
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
 
 from gi.repository import Gtk, Gio, Adw
 from .window import IweWindow
@@ -33,16 +33,18 @@ class IweApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        super().__init__(application_id='com.enoch02.iwe',
-                         flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
-                         resource_base_path='/com/enoch02/iwe')
-        self.create_action('quit', lambda *_: self.quit(), ['<control>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
+        super().__init__(
+            application_id="com.enoch02.iwe",
+            flags=Gio.ApplicationFlags.HANDLES_OPEN,
+            resource_base_path="/com/enoch02/iwe",
+        )
+        self.create_action("quit", lambda *_: self.quit(), ["<control>q"])
+        self.create_action("about", self.on_about_action)
+        self.create_action("preferences", self.on_preferences_action)
 
         # win.open-file is registered by IweWindow; the accelerator works as
         # long as the focused window provides the action
-        self.set_accels_for_action('win.open-file', ['<control>o'])
+        self.set_accels_for_action("win.open-file", ["<control>o"])
 
     def do_activate(self):
         """Called when the application is activated.
@@ -55,21 +57,46 @@ class IweApplication(Adw.Application):
             win = IweWindow(application=self)
         win.present()
 
+    def do_open(self, files, n_files, hint):
+        """Open documents passed on the command line or over D-Bus.
+
+        This is what a file manager triggers when a markdown file is
+        opened with the application.
+        """
+        for file in files:
+            win = self._window_for_document()
+            win.open_file(file)
+            win.present()
+
+    def _window_for_document(self):
+        """Pick the window that should show a newly opened document.
+
+        A window still showing the welcome page is reused, so launching
+        the app and then opening a file does not leave an empty window
+        behind; further documents get windows of their own.
+        """
+        for win in self.get_windows():
+            if win.is_empty:
+                return win
+        return IweWindow(application=self)
+
     def on_about_action(self, *args):
         """Callback for the app.about action."""
-        about = Adw.AboutDialog(application_name='Ìwé',
-                                application_icon='com.enoch02.iwe',
-                                developer_name='Enoch Adesanya',
-                                version='0.1.0',
-                                # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
-                                translator_credits = _('translator-credits'),
-                                developers=['Enoch Adesanya'],
-                                copyright='© 2026 Enoch Adesanya')
+        about = Adw.AboutDialog(
+            application_name="Ìwé",
+            application_icon="com.enoch02.iwe",
+            developer_name="Enoch Adesanya",
+            version="0.1.0",
+            # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
+            translator_credits=_("translator-credits"),
+            developers=["Enoch Adesanya"],
+            copyright="© 2026 Enoch Adesanya",
+        )
         about.present(self.props.active_window)
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
-        print('app.preferences action activated')
+        print("app.preferences action activated")
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.
