@@ -107,13 +107,7 @@ Install these extensions:
 - Meson (`mesonbuild.mesonbuild`)
 - Flatpak (`bilelmoussaoui.flatpak-vscode`)
 
-The workspace uses `_build` as the Meson build folder. The Meson extension
-uses `.flatpak/meson.sh` from the workspace settings.
-
 Open the Command Palette with `Ctrl+Shift+P`. Use these commands:
-
-- **Flatpak: Select or Change Active Manifest**: Select
-  `com.enoch02.iwe.json`.
 - **Flatpak: Build**: Build the application.
 - **Flatpak: Build and Run**: Build and start the application.
 - **Flatpak: Export Bundle**: Create `com.enoch02.iwe.flatpak` in the
@@ -128,20 +122,6 @@ Install the exported bundle:
 ```sh
 flatpak install --user ./com.enoch02.iwe.flatpak
 ```
-
-**Meson: Build** only compiles targets in the SDK. It does not create a
-Flatpak bundle. If the target list appears, select **Build all targets**.
-
-## File association
-
-The desktop file declares the `text/markdown` MIME type. The application
-handles open requests from the file manager and the command line.
-
-For Flatpak, the desktop file sets `DBusActivatable=false`. The application
-starts through `Exec`. Flatpak can then export the opened file to the
-document portal. Do not enable D-Bus activation. A sandboxed application
-cannot read the original host path.
-
 ## Tests
 
 Run the test suite:
@@ -162,28 +142,7 @@ src/           Python sources and Blueprint UI files
 subprojects/   Build dependencies
 ```
 
-## Translations
-
-Extract the translatable strings:
-
-```sh
-meson compile -C _build iwe-pot
-```
-
-Update the translation files:
-
-```sh
-meson compile -C _build iwe-update-po
-```
-
 ## Contributing
 
 Report bugs and request features in the GitHub issue tracker:
 <https://github.com/Enoch02/Iwe/issues>
-
-Run the tests before you send a change.
-
-## License
-
-Ìwé is licensed under the GNU General Public License version 3 or later.
-See `COPYING` for the full license text.
