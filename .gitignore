@@ -1,3 +1,4 @@
 /subprojects/blueprint-compiler
 .flatpak
 com.enoch02.iwe.flatpak
+__pycache__

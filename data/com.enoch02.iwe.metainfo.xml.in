@@ -10,8 +10,8 @@
     <p>No description</p>
   </description>
 
-  <developer id="tld.vendor">
-    <name>Developer name</name>
+  <developer id="com.enoch02">
+    <name>Enoch Adesanya</name>
   </developer>
 
   <!-- Required: Should be a link to the upstream homepage for the component -->
@@ -37,6 +37,9 @@
   <!-- All graphical applications having a desktop file must have this tag in the MetaInfo.
      If this is present, appstreamcli compose will pull icons, keywords and categories from the desktop file. -->
   <launchable type="desktop-id">com.enoch02.iwe.desktop</launchable>
+  <provides>
+    <mediatype>text/markdown</mediatype>
+  </provides>
   <!-- Use the OARS website (https://hughsie.github.io/oars/generate.html) to generate these and make sure to use oars-1.1 -->
   <content_rating type="oars-1.1" />
 
